@@ -29,4 +29,13 @@ class PollController extends Controller
 
         return redirect()->route('polls.index');
     }
+
+    public function show(Poll $poll)
+    {
+        $poll->load(['options' => function ($query) {
+            $query->withCount('votes as total_votes');
+        }]);
+
+        return view('polls.show', compact('poll'));
+    }
 }

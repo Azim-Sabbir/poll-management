@@ -15,6 +15,7 @@ Route::group(["prefix" => "admin", "middleware" => ["auth", "verified"]], functi
 
     Route::get("polls", [PollController::class, "index"])->name("polls.index");
     Route::post("polls", [PollController::class, "store"])->name("polls.store");
+    Route::get("polls/{poll}", [PollController::class, "show"])->name("polls.show");
 
 });
 
