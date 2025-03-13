@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PollController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,6 +12,9 @@ Route::group(["prefix" => "admin", "middleware" => ["auth", "verified"]], functi
     Route::get('/', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get("polls", [PollController::class, "index"])->name("polls.index");
+    Route::post("polls", [PollController::class, "store"])->name("polls.store");
 
 });
 
