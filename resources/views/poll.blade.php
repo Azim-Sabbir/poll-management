@@ -1,8 +1,9 @@
-<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<x-app-layout>
-    <div id="app"></div>
-</x-app-layout>
+<div data-theme="light" >
+    <x-app-layout>
+        <div id="app"></div>
+    </x-app-layout>
+</div>
 
 @viteReactRefresh
 @vite('resources/js/app.jsx')
