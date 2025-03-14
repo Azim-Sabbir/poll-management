@@ -31,6 +31,13 @@ const Poll= () => {
             });
     };
 
+    const handleDataUpdate = (data) => {
+        setTotalVotes(data.total_votes);
+        setPoll(data.poll);
+        setOptions(data.options);
+        setSelectedOption(data.given_vote?.option_id);
+    }
+
     /*equation -> (count / total) * 100 }}%*/
 
     useEffect(() => {
@@ -38,16 +45,24 @@ const Poll= () => {
 
         fetch(`/polls/${pollId}`)
             .then(response => response.json())
-            .then(data => {
-                setTotalVotes(data.total_votes);
-                setPoll(data.poll);
-                setOptions(data.options);
-                setSelectedOption(data.given_vote?.option_id);
-            })
+            .then(data => handleDataUpdate(data))
             .catch(error => {
                 console.error('Error fetching poll data:', error);
             });
     }, []);
+
+
+    useEffect(() => {
+        if (!poll) return;
+
+        window.Echo.channel(`poll.${poll?.id}`).listen("VoteUpdated", (data) => {
+            handleDataUpdate(data);
+        });
+
+        return () => {
+            window.Echo.leave(`poll.${poll?.id}`);
+        };
+    }, [poll?.id]);
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">

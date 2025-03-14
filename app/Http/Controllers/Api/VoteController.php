@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\VoteUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Poll;
 use App\Models\Vote;
@@ -15,6 +16,7 @@ class VoteController extends Controller
 
     public function show($slug)
     {
+        logger(\request()->ips());
         try {
             $data = $this->voteService->fetchVote($slug);
             return response()->json($data, 200);
@@ -40,16 +42,18 @@ class VoteController extends Controller
 
             $poll = Poll::query()->findOrFail($pollId);
 
-            $vote = Vote::create([
+            Vote::create([
                 'poll_id' => $poll->id,
                 'option_id' => $request->option_id,
                 'user_id' => auth()->id() ?? null,
                 'ip_address' => $request->ip()
             ]);
 
-            $poll->load(['options' => function ($query) {
-                $query->withCount('votes as total_votes');
-            }]);
+            $payload = $this->voteService->fetchVote($poll->slug);
+
+
+            broadcast(new VoteUpdated($payload, $pollId))->toOthers();
+
 
             return response()->json(['message' => 'Vote submitted successfully'], 200);
         } catch (\Exception $e) {
