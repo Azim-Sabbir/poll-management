@@ -9,7 +9,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(["prefix" => "admin", "middleware" => ["auth", "verified"]], function() {
+Route::group(["prefix" => "admin", "middleware" => ["auth", "verified", "admin"]], function() {
     Route::get('/', function () {
         return view('dashboard');
     })->name('dashboard');
