@@ -111,3 +111,6 @@
     const root = ReactDOM.createRoot(document.getElementById("poll-root"));
     root.render(<Poll />);
 </script>
+
+{{--@viteReactRefresh--}}
+{{--@vite('resources/js/app.jsx')--}}
