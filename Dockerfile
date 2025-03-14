@@ -1,38 +1,43 @@
-# Use the official PHP image with Apache
-FROM php:8.2-apache
+# Base image
+FROM php:8.2-fpm
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    libzip-dev \
+    unzip \
+    curl \
+    && docker-php-ext-install pdo pdo_mysql zip
+
+RUN docker-php-ext-install pcntl
+RUN docker-php-ext-configure pcntl --enable-pcntl
+
+# Install Node.js and npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
+
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libzip-dev \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    libpq-dev \
-    && docker-php-ext-install pdo_mysql zip exif pcntl bcmath gd
-
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Copy the Laravel project files
+# Copy Laravel app files first (including artisan)
 COPY . .
 
-# Install PHP dependencies
-RUN composer install --optimize-autoloader --no-dev
-
-# Set permissions for Laravel storage and bootstrap/cache
+# Ensure storage & bootstrap/cache have correct permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Enable Apache modules and configure .htaccess
-RUN a2enmod rewrite
-COPY .docker/apache.conf /etc/apache2/sites-available/000-default.conf
+# Now install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
 
-# Expose port 80
-EXPOSE 80
+# Install frontend dependencies
+RUN npm install && npm run build
 
-# Start Apache
-CMD ["apache2-foreground"]
+# Expose necessary ports
+EXPOSE 80 8080
+
+COPY start.sh start.sh
+RUN chmod +x start.sh
+
+CMD ["./start.sh"]

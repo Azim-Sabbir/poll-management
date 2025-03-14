@@ -1,11 +1,24 @@
 services:
     app:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: laravel_app
-        restart: unless-stopped
+        build: .
+        container_name: laravel_reverb
+        working_dir: /var/www/html
         ports:
             - "8000:80"
+            - "8080:8080"
+        depends_on:
+            - mysql
+
+    mysql:
+        image: mysql:8.0
+        container_name: mysql
+        restart: always
+        environment:
+            MYSQL_DATABASE: poll_management
+            MYSQL_ROOT_PASSWORD: poll_management
+        ports:
+            - "3306:3306"
         volumes:
-            - .:/var/www/html
+            - db_data:/var/lib/mysql
+volumes:
+    db_data:
