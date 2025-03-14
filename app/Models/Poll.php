@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Poll extends Model
 {
-    protected $fillable = ['question'];
+    protected $fillable = ['question', 'slug'];
 
     public function options(): HasMany
     {

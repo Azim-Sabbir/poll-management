@@ -25,7 +25,7 @@
                                 </span>
                                 </div>
                                 <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2.5">
-                                    <div style="width: {{ ($option->total_votes / $totalVotes) * 100 }}%; background: #2b70c8; height: 10px;border-radius: 20px">&nbsp;</div>
+                                    <div style="width: {{ $totalVotes > 0 ? ($option->total_votes / $totalVotes) * 100 : 0 }}%; background: #2b70c8; height: 10px;border-radius: 20px">&nbsp;</div>
                                 </div>
                             </div>
                         @empty

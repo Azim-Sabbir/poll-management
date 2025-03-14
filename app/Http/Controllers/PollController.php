@@ -21,7 +21,11 @@ class PollController extends Controller
             'options' => 'required|array',
         ]);
 
-        $poll = Poll::create($request->only('question'));
+
+        $poll = Poll::create([
+            'question' => $request->question,
+            'slug' => \Str::slug($request->question),
+        ]);
 
         $poll->options()->createMany(array_map(function ($option) {
             return ['title' => $option];
