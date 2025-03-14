@@ -54,9 +54,9 @@ const Poll= () => {
             <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
                 {/* Header */}
                 <header className="text-center mb-6">
-                    <h1 className="text-2xl font-bold text-gray-800">Poll UI Design</h1>
+                    <h1 className="text-2xl font-bold text-gray-800">{poll?.question}</h1>
                     <p className="text-sm text-gray-600 mt-2">
-                        Vote for your favorite programming language and see the results in real-time.
+                        {selectedOption ? "You have already voted." : "Select an option below to vote."}
                     </p>
                 </header>
 

@@ -12,8 +12,9 @@ class VoteService
         $userId = auth()->id();
         return Vote::query()
             ->where('poll_id', $pollId)
-            ->when($userId, function ($query) use($userId) {
-                $query->where('user_id', $userId);
+            ->when($userId, function ($query) use($userId, $ip) {
+                $query->where('user_id', $userId)
+                    ->orWhere('ip_address', $ip);
             })
             ->when(blank($userId), function ($query) use ($ip) {
                 $query->where('ip_address', $ip);
