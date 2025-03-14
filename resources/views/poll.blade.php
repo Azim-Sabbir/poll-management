@@ -1,12 +1,3 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
 <div id="poll-root"></div>
 
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -20,22 +11,36 @@
     function Poll() {
         const [selectedOption, setSelectedOption] = useState(null);
 
-        // Options data
-        const options = [
-            { id: "opt-1", label: "HTML", percent: "30%", color: "bg-blue-500" },
-            { id: "opt-2", label: "Java", percent: "20%", color: "bg-green-500" },
-            { id: "opt-3", label: "Python", percent: "40%", color: "bg-yellow-500" },
-            { id: "opt-4", label: "jQuery", percent: "10%", color: "bg-red-500" },
-        ];
-
-        // Handle option click
+        const [totalVotes, setTotalVotes] = useState(0);
+        const [poll, setPoll] = useState(null);
+        const [options, setOptions] = useState([]);
+        const [loading, setLoading] = useState(true);
         const handleOptionClick = (id) => {
             setSelectedOption(id);
         };
 
         const getWidth = (percent) => {
-            return {width: percent}
+            return {width: `${percent}%`}
         }
+
+
+        /*equation -> (count / total) * 100 }}%*/
+
+        useEffect(() => {
+            const pollId = window.location.pathname.split('/').pop();
+
+            fetch(`/polls/${pollId}`)
+                .then(response => response.json())
+                .then(data => {
+                    setTotalVotes(data.total_votes);
+                    setPoll(data.poll);
+                    setOptions(data.options);
+                })
+                .catch(error => {
+                    console.error('Error fetching poll data:', error);
+                });
+        }, []);
+
 
         return (
             <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
@@ -81,24 +86,22 @@
                                                 }`}
                                             ></span>
                                             <span className="text-gray-800 font-medium">
-                                              {option.label}
+                                              {option.title} ({option.votes} votes)
                                             </span>
                                         </div>
-                                        <span className="text-gray-600">{option.percent}</span>
+                                        <span className="text-gray-600">{option.percentage}%</span>
                                     </div>
-                                    {/* Progress Bar */}
                                     <div
-                                        className={`mt-3 h-2 rounded-full ${option.color}`}
-                                        style={getWidth(option.percent)}
+                                        className={`mt-3 h-2 rounded-full bg-blue-500`}
+                                        style={getWidth(option.percentage)}
                                     ></div>
                                 </label>
                             </div>
                         ))}
                     </div>
 
-                    {/* Footer */}
                     <footer className="mt-6 text-center text-sm text-gray-500">
-                        <p>8/10 people have voted. Results are updated in real-time.</p>
+                        <p>{totalVotes} people have voted. Results are updated in real-time.</p>
                     </footer>
                 </div>
             </div>
@@ -108,5 +111,3 @@
     const root = ReactDOM.createRoot(document.getElementById("poll-root"));
     root.render(<Poll />);
 </script>
-</body>
-</html>
