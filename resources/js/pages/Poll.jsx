@@ -113,17 +113,17 @@ const Poll= () => {
                                     </div>
                                     <span className="text-gray-600">{option.percentage}%</span>
                                 </div>
-                                <div
-                                    className={`mt-3 h-2 rounded-full bg-blue-500`}
-                                    style={{width: `${option.percentage}%`}}
-                                ></div>
+                                <div className="mt-3 h-2 rounded-full bg-gray-200 w-full">
+                                    <div className={`mt-3 h-2 rounded-full bg-blue-500`}
+                                         style={{width: `${option.percentage}%`}}></div>
+                                </div>
                             </label>
                         </div>
                     ))}
                 </div>
 
                 <footer className="mt-6 text-center text-sm text-gray-500">
-                    <p>{totalVotes} people have voted. Results are updated in real-time.</p>
+                    <p>{totalVotes} people have voted. <b>Results are updated in real-time.</b></p>
                 </footer>
             </div>
         </div>

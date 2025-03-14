@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('poll/{slug}', function () {
     return view('poll');
-});
+})->name('poll.public');
 
 /*api routes*/
 Route::get('polls/{slug}', [VoteController::class, 'show']);

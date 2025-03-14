@@ -14,11 +14,11 @@
                             <label class="block uppercase tracking-wide text-blue-700 text-xs font-bold mb-2" for="option-1">
                                 Question for the poll
                             </label>
-                            <input name="question" id="question" type="text" placeholder="poll question" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-300 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 pr-3">
+                            <input name="question" id="question" type="text" placeholder="Poll question" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-300 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 pr-3">
                         </div>
                     </div>
-                    <div id="option-container">
-                        <div class="flex flex-wrap -mx-3 mb-6">
+                    <div id="option-container" class="pt-10">
+                        <h2 class="text-center text-blue-50 text-2xl font-bold mb-4">Add Options for the Poll</h2>                        <div class="flex flex-wrap -mx-3 mb-6">
                             <div class="w-full px-3">
                                 <label class="block uppercase tracking-wide text-blue-700 text-xs font-bold mb-2" for="option-1">
                                     Option 1
@@ -68,8 +68,14 @@
                             </th>
                             <td class="px-6 py-4">
                                 <a href="{{ route("polls.show", $poll->id) }}" title="See result and real time updates" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                    Result
+                                    <button title="Copy link to clipboard" type="button" class="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-bold py-1 px-2 rounded mb-2">
+                                        Result
+                                    </button>
                                 </a>
+
+                                <button onclick="copyToClipboard('{{ route('poll.public', ["slug" => $poll->slug]) }}')" title="Copy link to clipboard" type="button" class="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-bold py-1 px-2 rounded mb-2">
+                                    Share link
+                                </button>
                             </td>
                         </tr>
                     @endforeach
@@ -122,4 +128,14 @@
             firstOptionLabel.textContent = 'Option 1';
         }
     });
+</script>
+
+<script>
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            alert('Link copied to clipboard');
+        }, function(err) {
+            console.error('Could not copy text: ', err);
+        });
+    }
 </script>

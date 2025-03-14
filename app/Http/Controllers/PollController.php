@@ -9,7 +9,7 @@ class PollController extends Controller
 {
     public function index()
     {
-        $polls = Poll::query()->select('id', 'question', 'created_at')->get();
+        $polls = Poll::query()->select('id', 'question', 'created_at', 'slug')->get();
 
         return view('polls.index', compact('polls'));
     }
