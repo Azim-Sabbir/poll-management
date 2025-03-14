@@ -26,12 +26,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('poll/{poll}', function () {
+Route::get('poll/{slug}', function () {
     return view('poll');
 });
 
 /*api routes*/
-Route::get('polls/{poll}', [VoteController::class, 'show']);
-Route::post('polls/{poll}/vote', [VoteController::class, 'vote']);
+Route::get('polls/{slug}', [VoteController::class, 'show']);
+Route::post('polls/{pollId}/vote', [VoteController::class, 'vote']);
 
 require __DIR__.'/auth.php';

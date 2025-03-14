@@ -9,12 +9,25 @@ const Poll= () => {
     const [loading, setLoading] = useState(true);
     const handleOptionClick = (id) => {
         setSelectedOption(id);
+
+        fetch(`/polls/${poll.id}/vote`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            body: JSON.stringify({ option_id: id }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+                // setTotalVotes(data.total_votes);
+                // setOptions(data.options);
+            })
+            .catch((error) => {
+                console.error('Error voting:', error);
+            });
     };
-
-    const getWidth = (percent) => {
-        return {width: `${percent}%`}
-    }
-
 
     /*equation -> (count / total) * 100 }}%*/
 
@@ -33,7 +46,6 @@ const Poll= () => {
             });
     }, []);
 
-
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
             <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
@@ -48,14 +60,14 @@ const Poll= () => {
                 {/* Poll Options */}
                 <div className="space-y-4">
                     {options.map((option) => (
-                        <div key={option.id}>
+                        <div key={option.id} >
                             <input
                                 type="checkbox"
                                 name="poll"
                                 id={option.id}
                                 checked={selectedOption === option.id}
-                                onChange={() => handleOptionClick(option.id)}
                                 className="hidden"
+                                onChange={() => handleOptionClick(option.id)}
                             />
                             <label
                                 htmlFor={option.id}
@@ -66,7 +78,6 @@ const Poll= () => {
                                         ? "border-2 border-blue-500 bg-blue-50"
                                         : "border border-gray-200 hover:border-blue-300 hover:bg-gray-50"
                                 }`}
-                                onClick={() => handleOptionClick(option.id)}
                             >
                                 <div className="flex justify-between items-center">
                                     <div className="flex items-center gap-3">
@@ -85,7 +96,7 @@ const Poll= () => {
                                 </div>
                                 <div
                                     className={`mt-3 h-2 rounded-full bg-blue-500`}
-                                    style={getWidth(option.percentage)}
+                                    style={{width: `${option.percentage}%`}}
                                 ></div>
                             </label>
                         </div>
