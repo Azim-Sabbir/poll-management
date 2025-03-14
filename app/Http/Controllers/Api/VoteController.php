@@ -5,34 +5,18 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Poll;
 use App\Models\Vote;
+use App\services\VoteService;
 use Illuminate\Http\Request;
 
 class VoteController extends Controller
 {
+    public function __construct(private VoteService $voteService)
+    {}
+
     public function show($slug)
     {
         try {
-            $poll = Poll::query()->where('slug', $slug)->firstOrFail();
-            $poll->load(['options' => function ($query) {
-                $query->withCount('votes as total_votes');
-            }]);
-
-            $totalVotes = $poll->options->sum('total_votes');
-            $options = $poll->options->map(function ($option) use ($totalVotes) {
-                return [
-                    'id' => $option->id,
-                    'title' => $option->title,
-                    'votes' => $option->total_votes,
-                    'percentage' => $totalVotes > 0 ? number_format(($option->total_votes / $totalVotes) * 100, 1) : 0
-                ];
-            });
-
-            $data = [
-                'poll' => $poll->only("id", "question", "created_at"),
-                'options' => $options,
-                'total_votes' => $totalVotes
-            ];
-
+            $data = $this->voteService->fetchVote($slug);
             return response()->json($data, 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -48,7 +32,7 @@ class VoteController extends Controller
         $ipAddress = $request->ip();
 
         try {
-            $isAlreadyVoted = $this->isAlreadyVoted($pollId, $ipAddress);
+            $isAlreadyVoted = filled($this->voteService->givenVote($pollId, $ipAddress));
 
             if ($isAlreadyVoted) {
                 return response()->json(['message' => 'You have already voted'], 400);
@@ -71,19 +55,5 @@ class VoteController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
-    }
-
-    public function isAlreadyVoted($pollId, $ip): bool
-    {
-        $userId = auth()->id();
-        return Vote::query()
-            ->where('poll_id', $pollId)
-            ->when($userId, function ($query) use($userId) {
-                $query->where('user_id', $userId);
-            })
-            ->when(blank($userId), function ($query) use ($ip) {
-                $query->where('ip_address', $ip);
-            })
-            ->exists();
     }
 }

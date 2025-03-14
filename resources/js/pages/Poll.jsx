@@ -8,6 +8,8 @@ const Poll= () => {
     const [options, setOptions] = useState([]);
     const [loading, setLoading] = useState(true);
     const handleOptionClick = (id) => {
+        if (selectedOption) return;
+
         setSelectedOption(id);
 
         fetch(`/polls/${poll.id}/vote`, {
@@ -40,6 +42,7 @@ const Poll= () => {
                 setTotalVotes(data.total_votes);
                 setPoll(data.poll);
                 setOptions(data.options);
+                setSelectedOption(data.given_vote?.option_id);
             })
             .catch(error => {
                 console.error('Error fetching poll data:', error);
@@ -84,9 +87,10 @@ const Poll= () => {
                                             <span
                                                 className={`w-5 h-5 rounded-full border-2 ${
                                                     selectedOption === option.id
-                                                        ? "border-blue-500"
+                                                        ? "border-blue-300"
                                                         : "border-gray-300"
                                                 }`}
+                                                style={{backgroundColor: selectedOption === option.id ? "#1a48af" : "transparent"}}
                                             ></span>
                                         <span className="text-gray-800 font-medium">
                                               {option.title} ({option.votes} votes)
