@@ -14,7 +14,7 @@
         <!-- Scripts -->
         <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 
-        @vite(['resources/js/app.js'])
+        @vite(['resources/js/app.jsx'])
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
