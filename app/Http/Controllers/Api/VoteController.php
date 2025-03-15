@@ -33,6 +33,15 @@ class VoteController extends Controller
         $ipAddress = $request->ip();
 
         try {
+
+            $isAlreadyVoted = filled(
+                $this->voteService->givenVote($pollId, $ipAddress)
+            );
+
+            if ($isAlreadyVoted) {
+                return response()->json(['message' => 'You have already voted'], 400);
+            }
+
             $this->voteService->handleVote(
                 $request,
                 $pollId,
@@ -41,6 +50,7 @@ class VoteController extends Controller
 
             return response()->json(['message' => 'Vote submitted successfully'], 200);
         } catch (\Exception $e) {
+            logger($e->getMessage());
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }

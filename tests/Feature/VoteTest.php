@@ -27,7 +27,7 @@ class VoteTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $response = $this->postJson("/polls/{$poll->id}/vote", [
+        $response = $this->postJson("/polls/$poll->id/vote", [
             'option_id' => $option->id,
         ]);
 
@@ -54,7 +54,7 @@ class VoteTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $firstResponse = $this->postJson("/polls/{$poll->id}/vote", [
+        $firstResponse = $this->postJson("/polls/$poll->id/vote", [
             'option_id' => $option->id,
         ]);
 
@@ -62,7 +62,7 @@ class VoteTest extends TestCase
             dd($firstResponse->json());
         }
 
-        $secondResponse = $this->postJson("/polls/{$poll->id}/vote", [
+        $secondResponse = $this->postJson("/polls/$poll->id/vote", [
             'option_id' => $option->id,
         ]);
 
@@ -87,12 +87,12 @@ class VoteTest extends TestCase
         $ipAddress = '127.0.0.1';
 
         $this->withServerVariables(['REMOTE_ADDR' => $ipAddress])
-            ->postJson("/polls/{$poll->id}/vote", [
+            ->postJson("/polls/$poll->id/vote", [
                 'option_id' => $option->id,
             ]);
 
         $response = $this->withServerVariables(['REMOTE_ADDR' => $ipAddress])
-            ->postJson("/polls/{$poll->id}/vote", [
+            ->postJson("/polls/$poll->id/vote", [
                 'option_id' => $option->id,
             ]);
 
@@ -112,8 +112,8 @@ class VoteTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $response = $this->postJson("/api/polls/{$poll->id}/vote", [
-            'option_id' => 999,
+        $response = $this->postJson("/polls/$poll->id/vote", [
+            'option_id' => \Illuminate\Support\Str::random(5),
         ]);
 
         $response->assertStatus(422)

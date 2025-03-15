@@ -87,14 +87,6 @@ class VoteService
      */
     public function handleVote($request, $pollId, $ipAddress): void
     {
-        $isAlreadyVoted = filled(
-            $this->givenVote($pollId, $ipAddress)
-        );
-
-        if ($isAlreadyVoted) {
-            throw new AlreadyVotedException();
-        }
-
         $poll = Poll::query()->findOrFail($pollId);
 
         Vote::create([
