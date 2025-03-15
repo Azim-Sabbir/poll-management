@@ -1,7 +1,7 @@
 services:
     app:
         build: .
-        container_name: laravel_reverb
+        container_name: poll_management_app
         working_dir: /var/www/html
         ports:
             - "8000:80"
@@ -14,10 +14,12 @@ services:
         container_name: mysql
         restart: always
         environment:
+            MYSQL_ROOT_PASSWORD: Root@Pass@123
             MYSQL_DATABASE: poll_management
-            MYSQL_ROOT_PASSWORD: poll_management
+            MYSQL_USER: poll_management
+            MYSQL_PASSWORD: poll_management
         ports:
-            - "3306:3306"
+            - "3309:3306"
         volumes:
             - db_data:/var/lib/mysql
 volumes:
