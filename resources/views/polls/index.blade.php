@@ -132,10 +132,21 @@
 
 <script>
     function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(function() {
-            alert('Link copied to clipboard');
-        }, function(err) {
-            console.error('Could not copy text: ', err);
-        });
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    alert("Link copied to clipboard");
+                })
+                .catch((err) => {
+                    console.error("Clipboard copy failed", err);
+                });
+        } else {
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+        }
     }
 </script>
