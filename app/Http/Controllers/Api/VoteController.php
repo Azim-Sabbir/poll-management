@@ -16,7 +16,6 @@ class VoteController extends Controller
 
     public function show($slug)
     {
-        logger(\request()->ips());
         try {
             $data = $this->voteService->fetchVote($slug);
             return response()->json($data, 200);
@@ -34,26 +33,11 @@ class VoteController extends Controller
         $ipAddress = $request->ip();
 
         try {
-            $isAlreadyVoted = filled($this->voteService->givenVote($pollId, $ipAddress));
-
-            if ($isAlreadyVoted) {
-                return response()->json(['message' => 'You have already voted'], 400);
-            }
-
-            $poll = Poll::query()->findOrFail($pollId);
-
-            Vote::create([
-                'poll_id' => $poll->id,
-                'option_id' => $request->option_id,
-                'user_id' => auth()->id() ?? null,
-                'ip_address' => $request->ip()
-            ]);
-
-            $payload = $this->voteService->fetchVote($poll->slug);
-
-
-            broadcast(new VoteUpdated($payload, $pollId))->toOthers();
-
+            $this->voteService->handleVote(
+                $request,
+                $pollId,
+                $ipAddress
+            );
 
             return response()->json(['message' => 'Vote submitted successfully'], 200);
         } catch (\Exception $e) {
