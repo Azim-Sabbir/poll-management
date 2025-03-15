@@ -147,6 +147,7 @@
             textarea.select();
             document.execCommand("copy");
             document.body.removeChild(textarea);
+            alert("Link copied to clipboard");
         }
     }
 </script>
