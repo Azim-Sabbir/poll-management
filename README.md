@@ -1,66 +1,139 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <h1 style="text-align: center">Poll Dashboard</h1>
+  <p>A real-time poll dashboard built with Laravel, React, Websocket, broadcasting and Tailwind CSS. This application allows users to create, share, and vote on polls while viewing live updates.</p>
 </p>
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Real-Time Poll Updates:
+- Live updates using Laravel Reverb (WebSocket server).
+- Progress bars and vote counts update dynamically.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### User Authentication:
+- Login and registration system.
+- Protected routes for authenticated users.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Poll Management:
+- Create polls with multiple options.
+- View poll results with percentages and progress bars.
 
-## Learning Laravel
+### Docker Support:
+- Easy setup using Docker for local development.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Prerequisites
+Before you begin, ensure you have the following installed:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- PHP (>= 8.1)
+- Composer
+- Node.js (>= 16.x)
+- Docker (optional, for Docker setup)
+- MySQL or any other supported database
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Installation
+1. Clone the Repository
+   `git clone https://github.com/your-username/poll-dashboard.git`
+    && cd poll-dashboard
+2. Install PHP Dependencies
+   `composer install`
+3. Install JavaScript Dependencies
+   `npm install`
+4. Set Up Environment Variables
+   Copy the `.env.example` file to `.env` and update the database credentials:
 
-## Laravel Sponsors
+`cp .env.example .env` and edit the .env file:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+````
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=poll_dashboard
+DB_USERNAME=root
+DB_PASSWORD=your_password
 
-### Premium Partners
+REVERB_APP_ID=your_app_id
+REVERB_APP_KEY=your_app_key
+REVERB_APP_SECRET=your_app_secret
+REVERB_HOST=0.0.0.0
+REVERB_PORT=8080
+````
+5. Generate Application Key
+   `php artisan key:generate`
+6. Run Migrations
+   `php artisan migrate`
+7. Compile Assets
+   `npm run build`
+8. Start the Development Server
+   `php artisan serve`
+9. Start Laravel Reverb (WebSocket Server)
+   `php artisan reverb:start`
+10. Generate admin user
+    `php artisan app:create-admin`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Docker Setup (Optional)
+   If you prefer using Docker, follow these steps:
 
-## Contributing
+1. Build and Start Containers
+   `docker-compose up -d --build`
+2. App will be running at http://localhost:8000
+2. WebSocket Server [ws://localhost:8080]()
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Usage
+### Create a Poll
+- Log in or register as a admin (default email:`root@gmail.com`, password:`root`).
+Navigate to the `/admin/polls` page to go to the poll dashboard.
+- Enter the poll question and options.
+- Share the poll link with others.
 
-## Code of Conduct
+### Vote on a Poll
+- Log in or register from the login button, or you can vote as a guest.
+- Paste the poll link in the input field on the homepage.
+- Select an option and submit your vote.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### View real-time updates on the poll results.
+- View Poll Results
+- Progress bars show the percentage of votes for each option.
+- Total votes are displayed.
+- Live updates are displayed as soon as a vote is cast.
+- Live updates can be viewed on the poll admin dashboard as well by visiting each pools details page.
 
-## Security Vulnerabilities
+## Test Cases
+### A User Can Vote Successfully
+    Description: This test verifies that an authenticated user can successfully vote on a poll.
+#### Steps:
+- A poll and an option are created. 
+- A user is authenticated. 
+- The user submits a vote for the option.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### A User Cannot Vote More Than Once
+    Description: This test ensures that a user cannot vote more than once on the same poll.
+#### Steps:
+- A poll and an option are created.
+- A user is authenticated.
+- The user submits a vote for the option.
+- The user attempts to vote again.
 
-## License
+### A Guest Cannot Vote More Than Once Based on IP Address
+    Description: This test ensures that a guest user (unauthenticated) cannot vote more than once on the same poll based on their IP address.
+#### Steps:
+- A poll and an option are created.
+- A guest user with a specific IP address submits a vote.
+- The same guest user attempts to vote again with the same IP address.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### A User Cannot Vote for an Invalid Option
+    Description: This test ensures that a user cannot vote for an option that does not exist.
+#### Steps:
+
+- A poll is created. 
+- A user is authenticated. 
+- The user attempts to vote for an invalid option.
+
+# FAQ
+
+### Q: How do I create a poll?
+A: Log in, navigate to the "Create Poll" page, and enter the poll details.
+
+### Q: Can I vote multiple times?
+A: No, each user (or IP address) can vote only once per poll.
+
+### Q: How do I share a poll?
+A: Copy the poll link using the "Copy Link" button and share it with others.
