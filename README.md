@@ -1,7 +1,7 @@
-<p align="center">
-  <h1 style="text-align: center">Poll Dashboard</h1>
-  <p>A real-time poll dashboard built with Laravel, React, Websocket, broadcasting and Tailwind CSS. This application allows users to create, share, and vote on polls while viewing live updates.</p>
-</p>
+  # Poll Dashboard
+  A real-time poll dashboard built with Laravel, React, Websocket, broadcasting and Tailwind CSS. This application allows users to create, share, and vote on polls while viewing live updates 
+  
+### production link -> [http://159.65.6.23:8000]()
 
 ## Features
 
