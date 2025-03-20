@@ -55,7 +55,7 @@ class ApiBaseController extends Controller
         $response = [
             "status" => 'error',
             "message" => $message,
-            "errors" => !blank($errors) ? $errors->getMessage() : []
+            "errors" => !blank($errors) ? $errors : []
         ];
 
         return response()->json($response, $statusCode);
