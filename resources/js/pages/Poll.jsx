@@ -12,6 +12,7 @@ const Poll= () => {
 
         fetch(`/api/polls/${poll.id}/vote`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),

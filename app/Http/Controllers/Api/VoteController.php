@@ -44,6 +44,9 @@ class VoteController extends ApiBaseController
                 null,
                 'Your vote has been recorded.',
                 withCookie: cookie("voted_poll_$pollId", true, (60*24)*7)
+                    ->setDomain('159.65.6.23/')
+                    ->setPath('/')
+                    ->setSameSite('lax')
             );
         } catch (\Exception $e) {
             return $this->failedResponse($e->getMessage());
