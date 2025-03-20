@@ -18,6 +18,10 @@ class VoteService
      */
     public function givenVote($pollId, $ip): ?Vote
     {
+        $isAlreadyVoted = request()->cookie("voted_poll_$pollId");
+
+        if (!$isAlreadyVoted) return null;
+
         $userId = auth()->id();
         return Vote::query()
             ->where('poll_id', $pollId)
@@ -28,7 +32,7 @@ class VoteService
             ->when(blank($userId), function ($query) use ($ip) {
                 $query->where('ip_address', $ip);
             })
-            ->first();
+            ->latest()->first();
     }
 
     /**

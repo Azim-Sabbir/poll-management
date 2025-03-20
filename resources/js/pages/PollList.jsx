@@ -7,7 +7,7 @@ const PollsList = () => {
     useEffect(() => {
         fetch(`/polls`)
             .then(response => response.json())
-            .then(data => {
+            .then(({data}) => {
                 setResources(data);
             })
             .catch(error => {

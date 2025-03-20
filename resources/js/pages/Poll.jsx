@@ -21,21 +21,20 @@ const Poll= () => {
             body: JSON.stringify({ option_id: id }),
         })
             .then((response) => response.json())
-            .then((data) => {
-                console.log(data)
-                // setTotalVotes(data.total_votes);
-                // setOptions(data.options);
-            })
+            .then(({data}) => {})
             .catch((error) => {
                 console.error('Error voting:', error);
             });
     };
 
-    const handleDataUpdate = (data) => {
+    const handleDataUpdate = (data, subscribed = false) => {
         setTotalVotes(data.total_votes);
         setPoll(data.poll);
         setOptions(data.options);
-        setSelectedOption(data.given_vote?.option_id);
+
+        if (subscribed) return;
+
+        setSelectedOption(data.given_vote?.option_id ?? null);
     }
 
     /*equation -> (count / total) * 100 }}%*/
@@ -45,7 +44,7 @@ const Poll= () => {
 
         fetch(`/polls/${pollId}`)
             .then(response => response.json())
-            .then(data => handleDataUpdate(data))
+            .then(({data}) => handleDataUpdate(data))
             .catch(error => {
                 console.error('Error fetching poll data:', error);
             });
@@ -56,7 +55,7 @@ const Poll= () => {
         if (!poll) return;
 
         window.Echo.channel(`poll.${poll?.id}`).listen("VoteUpdated", (data) => {
-            handleDataUpdate(data);
+            handleDataUpdate(data, true);
         });
 
         return () => {

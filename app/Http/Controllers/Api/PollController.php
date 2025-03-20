@@ -7,7 +7,7 @@ use App\Http\Resources\PollResource;
 use App\Models\Poll;
 use Illuminate\Http\Request;
 
-class PollController extends Controller
+class PollController extends ApiBaseController
 {
     public function index()
     {
@@ -18,11 +18,9 @@ class PollController extends Controller
                     $query->withCount('votes as total_votes');
                 }])->orderByDesc("id")->get();
 
-            return response()->json(new PollResource($polls), 200);
+            return $this->successResponse(new PollResource($polls));
         }catch (\Exception $exception) {
-            return response()->json([
-                'message' => $exception->getMessage()
-            ], 500);
+            return $this->failedResponse($exception->getMessage());
         }
     }
 }

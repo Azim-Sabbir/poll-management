@@ -9,7 +9,7 @@ use App\Models\Vote;
 use App\services\VoteService;
 use Illuminate\Http\Request;
 
-class VoteController extends Controller
+class VoteController extends ApiBaseController
 {
     public function __construct(private VoteService $voteService)
     {}
@@ -18,9 +18,9 @@ class VoteController extends Controller
     {
         try {
             $data = $this->voteService->fetchVote($slug);
-            return response()->json($data, 200);
+            return $this->successResponse($data, '');
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
+            return $this->failedResponse($e->getMessage());
         }
     }
 
@@ -33,13 +33,16 @@ class VoteController extends Controller
         $ipAddress = $request->ip();
 
         try {
+//            $isAlreadyVoted = filled(
+//                $this->voteService->givenVote($pollId, $ipAddress)
+//            );
 
-            $isAlreadyVoted = filled(
-                $this->voteService->givenVote($pollId, $ipAddress)
-            );
+            $isAlreadyVoted = $request->cookie("voted_poll_$pollId");
 
             if ($isAlreadyVoted) {
-                return response()->json(['message' => 'You have already voted'], 400);
+                return $this->failedResponse(
+                    null, 'You have already voted', 400
+                );
             }
 
             $this->voteService->handleVote(
@@ -48,10 +51,12 @@ class VoteController extends Controller
                 $ipAddress
             );
 
-            return response()->json(['message' => 'Vote submitted successfully'], 200);
+            return $this->successResponse(
+                null,
+                withCookie: cookie("voted_poll_$pollId", true, (60*24)*7)
+            );
         } catch (\Exception $e) {
-            logger($e->getMessage());
-            return response()->json(['message' => $e->getMessage()], 500);
+            return $this->failedResponse($e->getMessage());
         }
     }
 }
