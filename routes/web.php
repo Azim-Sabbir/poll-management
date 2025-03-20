@@ -19,6 +19,7 @@ Route::group(["prefix" => "admin", "middleware" => ["auth", "verified", "admin"]
     Route::get("polls/{poll}", [PollController::class, "show"])->name("polls.show");
     Route::get("polls/{poll}/edit", [PollController::class, "edit"])->name("polls.edit");
     Route::put("polls/{poll}/update", [PollController::class, "update"])->name("polls.update");
+    Route::delete("polls/{poll}", [PollController::class, "destroy"])->name("polls.destroy");
 
     /*poll option routes*/
     Route::post("polls/{poll}/option", [OptionController::class, "createOption"])->name("polls.option.store");

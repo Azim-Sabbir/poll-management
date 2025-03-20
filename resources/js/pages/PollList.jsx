@@ -5,7 +5,7 @@ const PollsList = () => {
     const [resources, setResources] = useState([]);
 
     useEffect(() => {
-        fetch(`/polls`)
+        fetch(`/api/polls`)
             .then(response => response.json())
             .then(({data}) => {
                 setResources(data);

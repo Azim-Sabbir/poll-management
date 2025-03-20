@@ -78,7 +78,7 @@
                                     <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
                                         {{ $poll->question }}
                                     </td>
-                                    <td class="px-6 py-4 space-x-2">
+                                    <td class="px-6 py-4 space-x-2 flex items-center gap-2">
                                         <a
                                             href="{{ route('polls.show', $poll->id) }}"
                                             class="inline-block px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all duration-300"
@@ -91,18 +91,19 @@
                                         >
                                             Share Link
                                         </button>
-                                        <a
-                                            href="{{ route('polls.edit', $poll->id) }}"
-                                            class="inline-block px-4 py-2 bg-amber-600 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all duration-300"
-                                        >
+                                        <a href="{{ route('polls.edit', $poll->id) }}" class="inline-block px-4 py-2 bg-amber-600 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all duration-300">
                                             Edit
                                         </a>
-                                        <a
-                                            href="{{ route('polls.show', $poll->id) }}"
-                                            class="inline-block px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all duration-300"
-                                        >
-                                            Delete
-                                        </a>
+                                        <form method="post" action="{{ route('polls.destroy', $poll->id) }} }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button
+                                                type="submit"
+                                                class="inline-block px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all duration-300"--}}
+                                            >
+                                                Delete
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

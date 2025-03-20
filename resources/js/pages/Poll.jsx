@@ -12,7 +12,7 @@ const Poll= () => {
 
         setSelectedOption(id);
 
-        fetch(`/polls/${poll.id}/vote`, {
+        fetch(`/api/polls/${poll.id}/vote`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ const Poll= () => {
     useEffect(() => {
         const pollId = window.location.pathname.split('/').pop();
 
-        fetch(`/polls/${pollId}`)
+        fetch(`/api/polls/${pollId}`)
             .then(response => response.json())
             .then(({data}) => handleDataUpdate(data))
             .catch(error => {

@@ -35,9 +35,15 @@ class PollController extends Controller
 
     public function show(Poll $poll)
     {
-        $poll->load(['options' => function ($query) {
-            $query->withCount('votes as total_votes');
-        }]);
+        $poll->load([
+            'options' => function ($query) {
+                $query->withCount('votes as total_votes');
+            },
+            'votes' => function ($query) {
+                $query->select('ip_address', 'user_agent', 'user_id', 'poll_id')
+                ->latest()->limit(100);
+            },
+        ]);
 
         return view('polls.show', compact('poll'));
     }
@@ -56,6 +62,16 @@ class PollController extends Controller
                 'question' => $request->question,
             ]);
             return back()->with('success', 'Poll title updated successfully');
+        } catch (\Exception $exception) {
+            return back()->with('error', 'Something went wrong');
+        }
+    }
+
+    public function destroy(Poll $poll)
+    {
+        try {
+            $poll->delete();
+            return redirect()->route('polls.index')->with('success', 'Poll deleted successfully');
         } catch (\Exception $exception) {
             return back()->with('error', 'Something went wrong');
         }

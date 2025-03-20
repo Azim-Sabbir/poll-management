@@ -46,6 +46,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg flex justify-center p-6 mb-8 mt-8">
                 <div class="w-full max-w-lg">
                     <h2 class="text-center text-blue-50 text-2xl font-bold mb-4">Current Options</h2>
+                    <p class="p-3 text-blue-50">( Removing an option will remove the votes with this option too )</p>
                     @foreach($poll->options as $option)
                         <div class="flex flex-wrap -mx-3 mb-6">
                             <div class="w-full px-3">

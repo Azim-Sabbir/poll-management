@@ -46,6 +46,44 @@
         </div>
     </div>
 
+    <div class="py-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6">Participants</h2>
+                    <div class="relative overflow-x-auto rounded-lg">
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">IP address</th>
+                                <th scope="col" class="px-6 py-3">User type</th>
+                                <th scope="col" class="px-6 py-3">User agent</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($poll->votes as $vote)
+                                <tr class="bg-white dark:bg-gray-800 border-b dark:border-gray-700">
+                                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                                        {{ $vote->ip_address }}
+                                    </td>
+                                    <td class="px-6 py-4 space-x-2 flex items-center gap-2">
+                                        <span class="text-green {{ $vote->user_id ? "text-red-500" : "text-blue-500" }}">
+                                            {{ $vote->user_id ? 'User' : 'Guest' }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                        {{ $vote->user_agent }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/pusher-js@8.0.1/dist/web/pusher.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.17.1/echo.iife.min.js" integrity="sha512-+niSJwvEHJjkzsB/dPujR2RRenWKIx7jZ/R6Q1XVY3ZmQ1s6BN5coO9smFctXZ29kjGO98vJ0Rx+K+n3pFkWMw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>

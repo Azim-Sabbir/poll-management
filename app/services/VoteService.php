@@ -97,7 +97,8 @@ class VoteService
             'poll_id' => $poll->id,
             'option_id' => $request->option_id,
             'user_id' => auth()->id() ?? null,
-            'ip_address' => $request->ip()
+            'ip_address' => $request->ip(),
+            'user_agent' => getUserAgent($request),
         ]);
 
         $payload = $this->fetchVote($poll->slug);
