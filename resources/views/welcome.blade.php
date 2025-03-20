@@ -77,6 +77,12 @@
                 >
                     Go
                 </a>
+                <a
+                    href="/poll"
+                    class="inline-block px-6 py-2 border border-[#1b1b18] dark:border-[#EDEDEC] text-[#1b1b18] dark:text-[#EDEDEC] rounded-lg hover:bg-[#1b1b18] dark:hover:bg-[#EDEDEC] hover:text-white dark:hover:text-[#1b1b18] transition-colors"
+                >
+                    See all available poll
+                </a>
             </div>
         </div>
     </div>
