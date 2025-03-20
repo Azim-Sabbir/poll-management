@@ -41,14 +41,17 @@ class VoteController extends ApiBaseController
                 $isAlreadyVoted
             );
 
-            $cookie = cookie("voted_poll_$pollId", true, (60*24)*7)
-            ->httpOnly();
-
-            return $this->successResponse(
-                null,
-                'Your vote has been recorded.',
-                withCookie: $cookie
+            setcookie(
+                "voted_poll_$pollId",
+                true,
+                time() + (60 * 60 * 24 * 7),
+                "/",
+                "127.0.0.1",
+                false,
+                true
             );
+
+            return $this->successResponse(null);
         } catch (\Exception $e) {
             return $this->failedResponse($e->getMessage());
         }
