@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\VoteUpdated;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\VoteRequest;
 use App\Models\Poll;
 use App\Models\Vote;
 use App\services\VoteService;
@@ -24,12 +25,8 @@ class VoteController extends ApiBaseController
         }
     }
 
-    public function vote(Request $request, $pollId)
+    public function vote(VoteRequest $request, $pollId)
     {
-        $request->validate([
-            'option_id' => 'required|exists:options,id'
-        ]);
-
         $ipAddress = $request->ip();
 
         try {

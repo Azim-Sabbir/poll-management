@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PollRequest;
 use App\Models\Poll;
-use Illuminate\Http\Request;
 
 class PollController extends Controller
 {
@@ -14,24 +14,21 @@ class PollController extends Controller
         return view('polls.index', compact('polls'));
     }
 
-    public function store(Request $request)
+    public function store(PollRequest $request)
     {
-        $request->validate([
-            'question' => 'required|string|max:255',
-            'options' => 'required|array',
-        ]);
+        try {
+            $poll = Poll::create([
+                'question' => $request->question,
+                'slug' => \Str::slug($request->question),
+            ]);
 
-
-        $poll = Poll::create([
-            'question' => $request->question,
-            'slug' => \Str::slug($request->question),
-        ]);
-
-        $poll->options()->createMany(array_map(function ($option) {
-            return ['title' => $option];
-        }, $request->options));
-
-        return redirect()->route('polls.index');
+            $poll->options()->createMany(array_map(function ($option) {
+                return ['title' => $option];
+            }, $request->options));
+            return back()->with('success', 'Poll created successfully');
+        } catch (\Exception $exception) {
+            return back()->with('error', 'Something went wrong');
+        }
     }
 
     public function show(Poll $poll)

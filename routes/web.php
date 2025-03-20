@@ -10,15 +10,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+/*admin routes*/
 Route::group(["prefix" => "admin", "middleware" => ["auth", "verified", "admin"]], function() {
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
+    Route::view('/', 'dashboard')->name('dashboard');
     Route::get("polls", [PollController::class, "index"])->name("polls.index");
     Route::post("polls", [PollController::class, "store"])->name("polls.store");
     Route::get("polls/{poll}", [PollController::class, "show"])->name("polls.show");
-
 });
 
 Route::middleware('auth')->group(function () {
@@ -27,16 +24,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+/*public routes*/
 Route::prefix('poll')->group(function () {
     Route::view('/', 'poll');
     Route::view('/{slug}', 'poll');
 });
 
 /*api routes*/
-Route::group(["prefix" => "polls"], function() {
-    Route::get("/", [ApiPollController::class, "index"]);
-    Route::get('/{slug}', [VoteController::class, 'show']);
-    Route::post('/{pollId}/vote', [VoteController::class, 'vote']);
+Route::group(["prefix" => "/api"], function() {
+    Route::get("/polls", [ApiPollController::class, "index"]);
+    Route::get('/polls/{slug}', [VoteController::class, 'show']);
+    Route::post('/polls/{pollId}/vote', [VoteController::class, 'vote']);
 });
 
 

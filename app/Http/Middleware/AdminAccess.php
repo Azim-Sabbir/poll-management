@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\UserType;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ class AdminAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user()->type !== 'admin') {
+        if (auth()->user()->type !== UserType::ADMIN->value) {
             return redirect()->to('/');
         }
         return $next($request);

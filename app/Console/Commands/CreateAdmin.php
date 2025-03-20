@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Console\Command;
 
@@ -36,7 +37,7 @@ class CreateAdmin extends Command
         $admin->name = $name;
         $admin->email = $email;
         $admin->password = bcrypt($password);
-        $admin->type = 'admin';
+        $admin->type = UserType::ADMIN->value;
         $admin->save();
 
         $this->info('Admin user created successfully!');
