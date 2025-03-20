@@ -91,6 +91,18 @@
                                         >
                                             Share Link
                                         </button>
+                                        <a
+                                            href="{{ route('polls.edit', $poll->id) }}"
+                                            class="inline-block px-4 py-2 bg-amber-600 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all duration-300"
+                                        >
+                                            Edit
+                                        </a>
+                                        <a
+                                            href="{{ route('polls.show', $poll->id) }}"
+                                            class="inline-block px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all duration-300"
+                                        >
+                                            Delete
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach

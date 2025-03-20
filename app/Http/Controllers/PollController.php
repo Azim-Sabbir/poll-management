@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PollRequest;
+use App\Http\Requests\PollUpdateRequest;
 use App\Models\Poll;
+use Illuminate\Http\Request;
 
 class PollController extends Controller
 {
@@ -38,5 +40,24 @@ class PollController extends Controller
         }]);
 
         return view('polls.show', compact('poll'));
+    }
+
+    public function edit(Poll $poll)
+    {
+        $poll->load('options');
+
+        return view('polls.edit', compact('poll'));
+    }
+
+    public function update(Poll $poll, PollUpdateRequest $request)
+    {
+        try {
+            $poll->update([
+                'question' => $request->question,
+            ]);
+            return back()->with('success', 'Poll title updated successfully');
+        } catch (\Exception $exception) {
+            return back()->with('error', 'Something went wrong');
+        }
     }
 }

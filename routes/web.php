@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\PollController as ApiPollController;
 use App\Http\Controllers\Api\VoteController;
+use App\Http\Controllers\OptionController;
 use App\Http\Controllers\PollController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,13 @@ Route::group(["prefix" => "admin", "middleware" => ["auth", "verified", "admin"]
     Route::get("polls", [PollController::class, "index"])->name("polls.index");
     Route::post("polls", [PollController::class, "store"])->name("polls.store");
     Route::get("polls/{poll}", [PollController::class, "show"])->name("polls.show");
+    Route::get("polls/{poll}/edit", [PollController::class, "edit"])->name("polls.edit");
+    Route::put("polls/{poll}/update", [PollController::class, "update"])->name("polls.update");
+
+    /*poll option routes*/
+    Route::post("polls/{poll}/option", [OptionController::class, "createOption"])->name("polls.option.store");
+    Route::put("polls/option/{option}", [OptionController::class, "updatePollOption"])->name("polls.option.update");
+    Route::delete("polls/option/{option}", [OptionController::class, "removeOption"])->name("polls.option.destroy");
 });
 
 Route::middleware('auth')->group(function () {
