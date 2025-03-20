@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\PollController as ApiPollController;
 use App\Http\Controllers\Api\VoteController;
 use App\Http\Controllers\PollController;
 use App\Http\Controllers\ProfileController;
@@ -26,12 +27,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('poll/{slug}', function () {
-    return view('poll');
-})->name('poll.public');
+Route::prefix('poll')->group(function () {
+    Route::view('/', 'poll');
+    Route::view('/{slug}', 'poll');
+});
 
 /*api routes*/
-Route::get('polls/{slug}', [VoteController::class, 'show']);
-Route::post('polls/{pollId}/vote', [VoteController::class, 'vote']);
+Route::group(["prefix" => "polls"], function() {
+    Route::get("/", [ApiPollController::class, "index"]);
+    Route::get('/{slug}', [VoteController::class, 'show']);
+    Route::post('/{pollId}/vote', [VoteController::class, 'vote']);
+});
+
 
 require __DIR__.'/auth.php';

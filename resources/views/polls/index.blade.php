@@ -73,7 +73,7 @@
                                     </button>
                                 </a>
 
-                                <button onclick="copyToClipboard('{{ route('poll.public', ["slug" => $poll->slug]) }}')" title="Copy link to clipboard" type="button" class="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-bold py-1 px-2 rounded mb-2">
+                                <button onclick="copyToClipboard('{{ url("/poll/$poll->slug") }}')" title="Copy link to clipboard" type="button" class="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-bold py-1 px-2 rounded mb-2">
                                     Share link
                                 </button>
                             </td>
