@@ -8,8 +8,6 @@ const Poll= () => {
     const [options, setOptions] = useState([]);
     const [loading, setLoading] = useState(true);
     const handleOptionClick = (id) => {
-        if (selectedOption) return;
-
         setSelectedOption(id);
 
         fetch(`/api/polls/${poll.id}/vote`, {
@@ -89,11 +87,10 @@ const Poll= () => {
                             <label
                                 htmlFor={option.id}
                                 className={`block p-4 rounded-lg cursor-pointer transition-all duration-300
-                                     border-2 border-blue-500 bg-blue-50
                                      ${
-                                    selectedOption === option.id
-                                        ? "border-2 border-blue-500 bg-blue-50"
-                                        : "border border-gray-200 hover:border-blue-300 hover:bg-gray-50"
+                                        selectedOption === option.id
+                                        ? "border-2 border-blue-500 bg-blue-100"
+                                        : "border-2 border-gray-200 hover:border-blue-500 hover:bg-gray-50"
                                 }`}
                             >
                                 <div className="flex justify-between items-center">

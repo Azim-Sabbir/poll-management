@@ -27,8 +27,6 @@ class VoteController extends ApiBaseController
 
     public function vote(VoteRequest $request, $pollId)
     {
-        $ipAddress = $request->ip();
-
         try {
 //            $isAlreadyVoted = filled(
 //                $this->voteService->givenVote($pollId, $ipAddress)
@@ -36,20 +34,15 @@ class VoteController extends ApiBaseController
 
             $isAlreadyVoted = $request->cookie("voted_poll_$pollId");
 
-            if ($isAlreadyVoted) {
-                return $this->failedResponse(
-                    null, 'You have already voted', 400
-                );
-            }
-
             $this->voteService->handleVote(
                 $request,
                 $pollId,
-                $ipAddress
+                $isAlreadyVoted
             );
 
             return $this->successResponse(
                 null,
+                'Your vote has been recorded.',
                 withCookie: cookie("voted_poll_$pollId", true, (60*24)*7)
             );
         } catch (\Exception $e) {

@@ -44,6 +44,7 @@ Route::group(["prefix" => "/api"], function() {
     Route::get("/polls", [ApiPollController::class, "index"]);
     Route::get('/polls/{slug}', [VoteController::class, 'show']);
     Route::post('/polls/{pollId}/vote', [VoteController::class, 'vote']);
+    Route::put('/polls/{pollId}/vote', [VoteController::class, 'voteUpdate']);
 });
 
 

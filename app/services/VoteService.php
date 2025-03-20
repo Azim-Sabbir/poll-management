@@ -85,13 +85,19 @@ class VoteService
      *
      * @param $request
      * @param $pollId
-     * @param $ipAddress
+     * @param $isAlreadyVoted
      * @return void
      * @throws AlreadyVotedException
      */
-    public function handleVote($request, $pollId, $ipAddress): void
+    public function handleVote($request, $pollId, $isAlreadyVoted): void
     {
         $poll = Poll::query()->findOrFail($pollId);
+
+        /*if already voted, change the vote*/
+        if ($isAlreadyVoted) {
+            $this->updateVote($request, $poll);
+            return;
+        }
 
         Vote::create([
             'poll_id' => $poll->id,
@@ -101,10 +107,41 @@ class VoteService
             'user_agent' => getUserAgent($request),
         ]);
 
+        $this->broadcast($poll);
+    }
+
+    /**
+     * update the vote if already voted
+     *
+     * @param $request
+     * @param $poll
+     * @return void
+     * @throws AlreadyVotedException
+     */
+    private function updateVote($request, $poll): void
+    {
+        $vote = $this->givenVote($poll->id, $request->ip());
+
+        if ($vote->option_id == $request->option_id) {
+            throw new AlreadyVotedException();
+        }
+
+        $vote->update([
+            'option_id' => $request->option_id,
+            'user_id' => auth()->id() ?? null,
+            'ip_address' => $request->ip(),
+            'user_agent' => getUserAgent($request),
+        ]);
+
+        $this->broadcast($poll);
+    }
+
+    private function broadcast($poll): void
+    {
         $payload = $this->fetchVote($poll->slug);
         broadcast(new VoteUpdated(
             $payload,
-            $pollId
+            $poll->id
         ))->toOthers();
     }
 }
