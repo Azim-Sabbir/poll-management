@@ -33,7 +33,7 @@ class ApiBaseController extends Controller
             return response()->json(
                 $response,
                 $statusCode
-            )->withCookie($withCookie);
+            )->cookie($withCookie);
         }
 
         return response()->json($response, $statusCode);

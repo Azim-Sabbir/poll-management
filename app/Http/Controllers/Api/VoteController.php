@@ -9,6 +9,7 @@ use App\Models\Poll;
 use App\Models\Vote;
 use App\services\VoteService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 class VoteController extends ApiBaseController
 {
@@ -40,13 +41,13 @@ class VoteController extends ApiBaseController
                 $isAlreadyVoted
             );
 
+            $cookie = cookie("voted_poll_$pollId", true, (60*24)*7)
+            ->httpOnly();
+
             return $this->successResponse(
                 null,
                 'Your vote has been recorded.',
-                withCookie: cookie("voted_poll_$pollId", true, (60*24)*7)
-                    ->setDomain('159.65.6.23/')
-                    ->setPath('/')
-                    ->setSameSite('lax')
+                withCookie: $cookie
             );
         } catch (\Exception $e) {
             return $this->failedResponse($e->getMessage());
